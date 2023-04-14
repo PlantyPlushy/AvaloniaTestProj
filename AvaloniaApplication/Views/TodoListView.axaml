@@ -6,10 +6,16 @@
              x:Class="AvaloniaApplication.Views.TodoListView">
 	<DockPanel>
 		<Button DockPanel.Dock="Bottom"
-				HorizontalAlignment="Center"
+				HorizontalAlignment="Stretch"
 				Command="{Binding $parent[Window].DataContext.AddItem}">
 			Add an item
 		</Button>
+		<ToggleSwitch DockPanel.Dock="Bottom"
+					  HorizontalAlignment="Right"
+					  Margin="5"
+					  Command="{Binding	ShowUncompleted}">
+			Show Uncompleted?
+		</ToggleSwitch>
 		<ItemsControl Items="{Binding Items}">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
