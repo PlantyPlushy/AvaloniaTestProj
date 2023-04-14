@@ -10,10 +10,12 @@
 				Command="{Binding $parent[Window].DataContext.AddItem}">
 			Add an item
 		</Button>
-		<ToggleSwitch DockPanel.Dock="Bottom"
+		<ToggleSwitch Name="ShowCompletedSwitch" 
+					  DockPanel.Dock="Bottom"
 					  HorizontalAlignment="Right"
 					  Margin="5"
-					  Command="{Binding	ShowUncompleted}">
+					  Checked="ShowUncompleted"
+					  Unchecked="IncludedCompleted">
 			Show Uncompleted?
 		</ToggleSwitch>
 		<ItemsControl Items="{Binding Items}">

@@ -11,22 +11,37 @@ namespace AvaloniaApplication.ViewModels
     public class TodoListViewModel : ViewModelBase
     {
         ObservableCollection<TodoItem> items;
+        ObservableCollection<TodoItem> unfilteredItems;
+        private bool isChecked = true;
+
         public TodoListViewModel(IEnumerable<TodoItem> items)
         {
             Items = new ObservableCollection<TodoItem>(items);
+            unfilteredItems = new ObservableCollection<TodoItem>();
 
-            ShowUncompleted = ReactiveCommand.Create(() => 
+            //ShowUncompleted = ReactiveCommand.Create(ToggleFilteredItems);
+
+        }
+
+        public void ShowUncompleted()
+        {
+            // Save the unfiltered list to toggle later
+            unfilteredItems.Clear();
+            foreach (var item in Items)
             {
-                ObservableCollection<TodoItem> filteredItems = new();
-                foreach (var item in Items)
+                unfilteredItems.Add(new TodoItem { Description = item.Description, IsChecked = item.IsChecked });
+            }
+
+            // Filter and set the Items event to the filtered items
+            ObservableCollection<TodoItem> filteredItems = new();
+            foreach (var item in Items)
+            {
+                if (!item.IsChecked)
                 {
-                    if (!item.IsChecked)
-                    {
-                        filteredItems.Add(new TodoItem { Description = item.Description });
-                    }
+                    filteredItems.Add(new TodoItem { Description = item.Description });
                 }
-                Items = filteredItems;
-            });
+            }
+            Items = filteredItems;
         }
 
         public ObservableCollection<TodoItem> Items 
@@ -34,6 +49,5 @@ namespace AvaloniaApplication.ViewModels
             get => items;
             set => this.RaiseAndSetIfChanged(ref items, value);
         }
-        public ReactiveCommand<Unit, Unit> ShowUncompleted { get; }
     }
 }
