@@ -14,8 +14,7 @@
 					  DockPanel.Dock="Bottom"
 					  HorizontalAlignment="Right"
 					  Margin="5"
-					  Checked="ShowUncompleted"
-					  Unchecked="IncludedCompleted">
+					  Command="{Binding ShowUncompleted}">
 			Show Uncompleted?
 		</ToggleSwitch>
 		<ItemsControl Items="{Binding Items}">

@@ -11,37 +11,40 @@ namespace AvaloniaApplication.ViewModels
     public class TodoListViewModel : ViewModelBase
     {
         ObservableCollection<TodoItem> items;
-        ObservableCollection<TodoItem> unfilteredItems;
-        private bool isChecked = true;
+        private ObservableCollection<TodoItem> unfiltereditems;
+        private bool isChecked = false;
+
+        public ReactiveCommand<Unit, Unit> ShowUncompleted { get; }
 
         public TodoListViewModel(IEnumerable<TodoItem> items)
         {
             Items = new ObservableCollection<TodoItem>(items);
-            unfilteredItems = new ObservableCollection<TodoItem>();
-
-            //ShowUncompleted = ReactiveCommand.Create(ToggleFilteredItems);
+            unfiltereditems = Items;
+            ShowUncompleted = ReactiveCommand.Create(ToggleFilteredItems);
 
         }
 
-        public void ShowUncompleted()
+        public void ToggleFilteredItems()
         {
-            // Save the unfiltered list to toggle later
-            unfilteredItems.Clear();
-            foreach (var item in Items)
+            if (isChecked)
             {
-                unfilteredItems.Add(new TodoItem { Description = item.Description, IsChecked = item.IsChecked });
+                Items = unfiltereditems;
+                isChecked = !isChecked;
             }
-
-            // Filter and set the Items event to the filtered items
-            ObservableCollection<TodoItem> filteredItems = new();
-            foreach (var item in Items)
+            else
             {
-                if (!item.IsChecked)
+                // Filter and set the Items event to the filtered items
+                ObservableCollection<TodoItem> filteredItems = new();
+                foreach (var item in Items)
                 {
-                    filteredItems.Add(new TodoItem { Description = item.Description });
+                    if (!item.IsChecked)
+                    {
+                        filteredItems.Add(new TodoItem { Description = item.Description });
+                    }
                 }
+                Items = filteredItems;
+                isChecked = !isChecked;
             }
-            Items = filteredItems;
         }
 
         public ObservableCollection<TodoItem> Items 
